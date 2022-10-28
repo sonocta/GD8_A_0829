@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
 
         val geoPoint = GeoPoint(-7.78165, 110.414497)
-
         mapView.setMultiTouchControls(true)
         mapView.controller.animateTo(geoPoint)
         mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
@@ -42,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         getLocationMarker()
     }
 
-    // get lat long
     private fun getLocationMarker() {
         try {
             val stream = assets.open("sample_maps.json")
@@ -53,14 +51,13 @@ class MainActivity : AppCompatActivity() {
             val strContent = String(buffer, StandardCharsets.UTF_8)
             try {
                 val jsonObject = JSONObject(strContent)
-                val jsonArrayResult = jsonObject.getJSONArray("results")
+                val jsonArrayResult = jsonObject.getJSONArray("result")
                 for(i in 0 until jsonArrayResult.length()) {
                     val jsonObjectResult = jsonArrayResult.getJSONObject(i)
                     val modelMain = ModelMain()
                     modelMain.strName = jsonObjectResult.getString("name")
                     modelMain.strVicinity = jsonObjectResult.getString("vicinity")
 
-                    // get lat long
                     val jsonObjectGeo = jsonObjectResult.getJSONObject("geometry")
                     val jsonObjectLoc = jsonObjectGeo.getJSONObject("location")
                     modelMain.latLoc = jsonObjectLoc.getDouble("lat")
@@ -68,20 +65,20 @@ class MainActivity : AppCompatActivity() {
                     modelMainList.add(modelMain)
                 }
                 initMarker(modelMainList)
-            } catch(e: JSONException) {
+            } catch (e: JSONException) {
                 e.printStackTrace()
             }
         } catch (ignored: IOException) {
             Toast.makeText(
-            this@MainActivity,
-            "Oops, ada yang tidak beres. Coba ulangi beberapa saat lagi.",
-            Toast.LENGTH_SHORT
+                this@MainActivity,
+                "Oops, ada yang tidak beres. Coba ulangi beberapa saat lagi.",
+                Toast.LENGTH_SHORT
             ).show()
         }
     }
 
     private fun initMarker(modelList: List<ModelMain>) {
-        for(i in modelList.indices) {
+        for (i in modelList.indices) {
             overlayItem = ArrayList()
             overlayItem.add(
                 OverlayItem(
@@ -99,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             marker.position = GeoPoint(modelList[i].latLoc, modelList[i].longLoc)
             marker.relatedObject = info
             marker.infoWindow = CustomInfoWindow(mapView)
-            marker.setOnMarkerClickListener{ item, arg1 ->
+            marker.setOnMarkerClickListener { item, arg1 ->
                 item.showInfoWindow()
                 true
             }
@@ -112,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
-        if(mapView != null) {
+        if (mapView != null){
             mapView.onResume()
         }
     }
@@ -120,7 +117,7 @@ class MainActivity : AppCompatActivity() {
     public override fun onPause() {
         super.onPause()
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
-        if(mapView != null) {
+        if (mapView != null){
             mapView.onPause()
         }
     }
