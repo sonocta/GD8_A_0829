@@ -17,6 +17,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 
+
 class MainActivity : AppCompatActivity() {
     var modelMainList: MutableList<ModelMain> = ArrayList()
     lateinit var mapController: MapController
